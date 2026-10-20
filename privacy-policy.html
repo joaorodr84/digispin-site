@@ -1,0 +1,247 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><title>DigiSpin — Privacy policy</title>
+<link rel="icon" href="favicon.ico?v=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --bg:#eef0f4;
+    --surface:#ffffff;
+    --surface-2:#e3e7ee;
+    --fg:#15171c;
+    --muted:#4a515e;
+    --rule:#d6dae2;
+    --accent:#b82c36;
+    --accent-ink:#ffffff;
+    --mono-accent:#288c60;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0c0d10;
+      --surface:#15171c;
+      --surface-2:#1c1f26;
+      --fg:#e6e8ec;
+      --muted:#9199a8;
+      --rule:#2a2e38;
+      --accent:#d6505a;
+      --accent-ink:#0c0d10;
+      --mono-accent:#4db88a;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0c0d10;
+    --surface:#15171c;
+    --surface-2:#1c1f26;
+    --fg:#e6e8ec;
+    --muted:#9199a8;
+    --rule:#2a2e38;
+    --accent:#d6505a;
+    --accent-ink:#0c0d10;
+    --mono-accent:#4db88a;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:16px;line-height:1.6}
+  .wrap{max-width:640px;margin:0 auto;padding:40px 20px 64px}
+  a{color:var(--accent)}
+  h1{font-family:"Sora",system-ui,sans-serif;font-size:1.9rem;margin:0 0 4px}
+  .updated{color:var(--muted);font-size:0.9rem;margin:0 0 32px}
+  h2{font-family:"Sora",system-ui,sans-serif;font-size:1.15rem;margin:32px 0 10px}
+  p,li{color:var(--fg)}
+  ul{padding-left:1.2rem}
+  li+li{margin-top:6px}
+
+  nav.site-nav{background:var(--surface);border-bottom:1px solid var(--rule)}
+  .site-nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px;flex-wrap:wrap}
+  .site-nav-brand{display:flex;align-items:center;gap:8px;font-family:"Sora",system-ui,sans-serif;font-weight:700;color:var(--fg);text-decoration:none;font-size:1rem}
+  .site-nav-icon{width:24px;height:24px;flex-shrink:0}
+  .site-nav-links{display:flex;gap:18px;flex-wrap:wrap}
+  .site-nav-links a{color:var(--muted);text-decoration:none;font-size:0.92rem}
+  .site-nav-links a:hover{color:var(--fg)}
+  .site-nav-links a.current{color:var(--accent);font-weight:600}
+  /* A real, working light/dark/system toggle (not just a description of
+     one) — the CSS it drives, via the html[data-theme] attribute, already
+     existed above for the try-it puzzle's theme-aware colours; this just
+     gives a visitor a way to set it directly instead of only inheriting
+     the device's own setting. Fixed so it's reachable at any scroll
+     position, since its effect is page-wide. */
+  .theme-toggle{
+    position:fixed;
+    top:14px;
+    right:14px;
+    z-index:10;
+    display:flex;
+    gap:2px;
+    background:var(--surface);
+    border:1px solid var(--rule);
+    border-radius:999px;
+    padding:3px;
+  }
+  .theme-toggle button{
+    width:32px;height:32px;
+    border:none;
+    border-radius:999px;
+    background:transparent;
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .theme-toggle button.active{
+    background:var(--surface-2);
+    color:var(--fg);
+  }
+
+  footer{padding-block:40px 48px;background:var(--surface);border-top:1px solid var(--rule)}
+  footer .wrap{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    color:var(--muted);
+    font-size:0.86rem;
+  }
+  .footer-icon{width:40px;height:40px;flex-shrink:0}
+  .footer-links{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+  footer .brand{font-family:"Sora",system-ui,sans-serif;color:var(--fg);font-weight:600;margin-right:4px;text-decoration:none}
+  footer a{color:var(--muted);text-decoration:none}
+  footer a:hover{color:var(--fg)}
+</style>
+</head><body>
+<script>
+// Restore the saved theme choice before the rest of the page renders, so a
+// returning visitor doesn't see a flash of the wrong theme. The three
+// states mirror the app's own Settings: "light"/"dark" force that theme
+// regardless of the device; no attribute (or "system") follows the device,
+// same as the CSS below already does via prefers-color-scheme.
+(function () {
+  try {
+    var saved = localStorage.getItem('digispin-theme');
+    if (saved === 'light' || saved === 'dark') {
+      document.documentElement.setAttribute('data-theme', saved);
+    }
+  } catch (e) {}
+})();
+</script>
+
+<div class="theme-toggle" role="group" aria-label="Theme">
+  <button type="button" data-theme-choice="light" aria-label="Light" title="Light">
+    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+    </svg>
+  </button>
+  <button type="button" data-theme-choice="dark" aria-label="Dark" title="Dark">
+    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
+    </svg>
+  </button>
+  <button type="button" data-theme-choice="system" aria-label="Follow the device" title="Follow the device">
+    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="4" width="18" height="12" rx="2" />
+      <path d="M8 20h8M12 16v4" />
+    </svg>
+  </button>
+</div>
+
+<nav class="site-nav">
+  <div class="wrap site-nav-inner">
+    <a class="site-nav-brand" href="index.html"><svg class="site-nav-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DigiSpin"><polygon points="54.95,38.30 58.55,34.70 58.55,16.70 54.95,13.10 51.35,16.70 51.35,34.70" fill="#b82c36"/><polygon points="60.88,43.44 65.91,42.65 76.49,28.09 75.69,23.06 70.67,23.85 60.09,38.42" fill="#cc8a31"/><polygon points="62.66,51.09 67.19,53.40 84.31,47.84 86.62,43.31 82.09,40.99 64.97,46.56" fill="#e1cb26"/><polygon points="59.60,58.32 61.91,62.86 79.03,68.42 83.56,66.11 81.25,61.57 64.13,56.01" fill="#93b440"/><polygon points="52.87,62.38 52.08,67.40 62.66,81.97 67.68,82.76 68.48,77.73 57.90,63.17" fill="#288c60"/><polygon points="45.05,61.70 41.45,65.30 41.45,83.30 45.05,86.90 48.65,83.30 48.65,65.30" fill="#a0d0ed"/><polygon points="39.12,56.56 34.09,57.35 23.51,71.91 24.31,76.94 29.33,76.15 39.91,61.58" fill="#2c92c8"/><polygon points="37.34,48.91 32.81,46.60 15.69,52.16 13.38,56.69 17.91,59.01 35.03,53.44" fill="#225b99"/><polygon points="40.40,41.68 38.09,37.14 20.97,31.58 16.44,33.89 18.75,38.43 35.87,43.99" fill="#7b277a"/><polygon points="47.13,37.62 47.92,32.60 37.34,18.03 32.32,17.24 31.52,22.27 42.10,36.83" fill="#cc6fa1"/></svg>DigiSpin</a>
+    <div class="site-nav-links">
+      <a href="how-to-play.html">How to play</a>
+      <a href="features.html">Features</a>
+      <a href="levels.html">Levels</a>
+      <a href="accessibility.html">Accessibility</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <h1>Privacy policy</h1>
+  <p class="updated">Last updated: 2026-10-08</p>
+
+  <h2>Summary</h2>
+  <p>DigiSpin keeps everything on your device. It does not collect, send, or share any personal information. It has no accounts, no analytics, and no network features.</p>
+
+  <h2>What DigiSpin stores on your device</h2>
+  <p>DigiSpin saves the following locally, in the app's own storage on the device:</p>
+  <ul>
+    <li>Your progress: which levels you have solved, and the moves and hints used on each.</li>
+    <li>Your statistics and achievements.</li>
+    <li>Your settings: the light, dark or device theme, the digit colour theme, and whether the move counter is shown.</li>
+  </ul>
+  <p>This data never leaves the device. It is removed when you delete the app, or when you use reset progress in Settings.</p>
+
+  <h2>What DigiSpin does not do</h2>
+  <ul>
+    <li>It does not collect your name, email, location, contacts, photos, or device identifiers.</li>
+    <li>It does not connect to any server to send or receive data during play.</li>
+    <li>It does not track you across other apps or websites.</li>
+    <li>It does not use third-party analytics or crash-reporting SDKs.</li>
+  </ul>
+
+  <h2>Children</h2>
+  <p>DigiSpin does not collect personal information from anyone, including children.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If the app ever starts collecting or sending data, this policy will be updated before that change ships, and the store listings will be updated to match.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy: <a href="mailto:info@digispin.me">info@digispin.me</a></p>
+</div>
+
+<footer>
+  <div class="wrap">
+    <svg class="footer-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DigiSpin icon"><polygon points="54.95,38.30 58.55,34.70 58.55,16.70 54.95,13.10 51.35,16.70 51.35,34.70" fill="#b82c36"/><polygon points="60.88,43.44 65.91,42.65 76.49,28.09 75.69,23.06 70.67,23.85 60.09,38.42" fill="#cc8a31"/><polygon points="62.66,51.09 67.19,53.40 84.31,47.84 86.62,43.31 82.09,40.99 64.97,46.56" fill="#e1cb26"/><polygon points="59.60,58.32 61.91,62.86 79.03,68.42 83.56,66.11 81.25,61.57 64.13,56.01" fill="#93b440"/><polygon points="52.87,62.38 52.08,67.40 62.66,81.97 67.68,82.76 68.48,77.73 57.90,63.17" fill="#288c60"/><polygon points="45.05,61.70 41.45,65.30 41.45,83.30 45.05,86.90 48.65,83.30 48.65,65.30" fill="#a0d0ed"/><polygon points="39.12,56.56 34.09,57.35 23.51,71.91 24.31,76.94 29.33,76.15 39.91,61.58" fill="#2c92c8"/><polygon points="37.34,48.91 32.81,46.60 15.69,52.16 13.38,56.69 17.91,59.01 35.03,53.44" fill="#225b99"/><polygon points="40.40,41.68 38.09,37.14 20.97,31.58 16.44,33.89 18.75,38.43 35.87,43.99" fill="#7b277a"/><polygon points="47.13,37.62 47.92,32.60 37.34,18.03 32.32,17.24 31.52,22.27 42.10,36.83" fill="#cc6fa1"/></svg>
+    <div class="footer-links">
+      <a class="brand" href="index.html">DigiSpin</a>
+      <a href="accessibility.html">Accessibility</a>
+      <a href="changelog.html">What's new</a>
+      <a href="privacy-policy.html">Privacy policy</a>
+      <a href="support.html">Support</a>
+      <a href="mailto:info@digispin.me">info@digispin.me</a>
+      <a href="https://github.com/joaorodr84">by joaorodr84</a>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function () {
+  var KEY = 'digispin-theme';
+  var buttons = document.querySelectorAll('[data-theme-choice]');
+
+  function currentChoice() {
+    var attr = document.documentElement.getAttribute('data-theme');
+    return attr === 'light' || attr === 'dark' ? attr : 'system';
+  }
+  function reflectActive() {
+    var choice = currentChoice();
+    buttons.forEach(function (btn) {
+      var isActive = btn.getAttribute('data-theme-choice') === choice;
+      btn.classList.toggle('active', isActive);
+    });
+  }
+  function apply(choice) {
+    if (choice === 'light' || choice === 'dark') {
+      document.documentElement.setAttribute('data-theme', choice);
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+    reflectActive();
+    try { localStorage.setItem(KEY, choice); } catch (e) {}
+  }
+
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      apply(btn.getAttribute('data-theme-choice'));
+    });
+  });
+  reflectActive();
+})();
+</script>
+
+
+</body></html>

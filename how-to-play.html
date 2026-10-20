@@ -1,0 +1,946 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<script>
+// Restore the saved theme choice before the rest of the page renders, so a
+// returning visitor doesn't see a flash of the wrong theme. The three
+// states mirror the app's own Settings: "light"/"dark" force that theme
+// regardless of the device; no attribute (or "system") follows the device,
+// same as the CSS below already does via prefers-color-scheme.
+(function () {
+  try {
+    var saved = localStorage.getItem('digispin-theme');
+    if (saved === 'light' || saved === 'dark') {
+      document.documentElement.setAttribute('data-theme', saved);
+    }
+  } catch (e) {}
+})();
+</script>
+
+<div class="theme-toggle" role="group" aria-label="Theme">
+  <button type="button" data-theme-choice="light" aria-label="Light" title="Light">
+    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+    </svg>
+  </button>
+  <button type="button" data-theme-choice="dark" aria-label="Dark" title="Dark">
+    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
+    </svg>
+  </button>
+  <button type="button" data-theme-choice="system" aria-label="Follow the device" title="Follow the device">
+    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="4" width="18" height="12" rx="2" />
+      <path d="M8 20h8M12 16v4" />
+    </svg>
+  </button>
+</div>
+
+<title>DigiSpin — How to play</title>
+<link rel="icon" href="favicon.ico?v=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#eef0f4;
+    --surface:#ffffff;
+    --surface-2:#e3e7ee;
+    --fg:#15171c;
+    --muted:#4a515e;
+    --rule:#d6dae2;
+    --accent:#b82c36;
+    --accent-ink:#ffffff;
+    --mono-accent:#288c60;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0c0d10;
+      --surface:#15171c;
+      --surface-2:#1c1f26;
+      --fg:#e6e8ec;
+      --muted:#9199a8;
+      --rule:#2a2e38;
+      --accent:#d6505a;
+      --accent-ink:#0c0d10;
+      --mono-accent:#4db88a;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0c0d10;
+    --surface:#15171c;
+    --surface-2:#1c1f26;
+    --fg:#e6e8ec;
+    --muted:#9199a8;
+    --rule:#2a2e38;
+    --accent:#d6505a;
+    --accent-ink:#0c0d10;
+    --mono-accent:#4db88a;
+    color-scheme:dark;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--fg);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    font-size:16px;
+    line-height:1.55;
+  }
+  h1,h2,h3{
+    font-family:"Sora",system-ui,sans-serif;
+    text-wrap:balance;
+    margin:0;
+  }
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+  a{color:var(--accent)}
+  .wrap{
+    max-width:720px;
+    margin:0 auto;
+    padding-inline:20px;
+  }
+  section{padding-block:56px}
+  section + section{border-top:1px solid var(--rule)}
+  .eyebrow{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:0.74rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--mono-accent);
+    margin-bottom:10px;
+    display:block;
+  }
+  .section-head{margin-bottom:28px}
+  .section-head h2{font-size:1.5rem;font-weight:700}
+  p.lede{color:var(--muted);max-width:62ch;margin-top:10px}
+  /* ---------- try-it mini puzzle: 8/9/1/3 locked, 0/2/4/5/6/7 playable.
+     Rendered and driven by the script near the end of this file, on the
+     same digit/slot math as the How to play diagrams above — not a
+     separate re-implementation. */
+  .tryit-board-wrap{display:flex;justify-content:center;margin-top:8px}
+  .tryit-board-card{background:var(--surface-2);border:2px solid var(--rule);border-radius:16px;padding:14px;display:inline-flex}
+  .tryit-tray{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+  .tryit-tray-slot{background:var(--surface-2);border:2px solid var(--rule);border-radius:12px;padding:6px;cursor:pointer}
+  .tryit-tray-slot.selected{border-color:var(--mono-accent)}
+  .tryit-controls{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:20px;flex-wrap:wrap}
+  .tryit-controls button{border:none;padding:0;font:inherit}
+  .tryit-status{font-size:14px;color:var(--muted);min-width:11ch}
+  .tryit-status.solved{color:var(--mono-accent);font-weight:700}
+  .tryit-cell{cursor:pointer}
+  .tryit-cell:hover{fill:var(--surface-2)}
+  footer{padding-block:40px 48px;background:var(--surface);border-top:1px solid var(--rule)}
+  footer .wrap{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    color:var(--muted);
+    font-size:0.86rem;
+  }
+  .footer-icon{width:40px;height:40px;flex-shrink:0}
+  .footer-links{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+  footer .brand{font-family:"Sora",system-ui,sans-serif;color:var(--fg);font-weight:600;margin-right:4px;text-decoration:none}
+  footer a{color:var(--muted);text-decoration:none}
+  footer a:hover{color:var(--fg)}
+  /* ---------- how-to-play reference cards, reused from
+     the "DigiSpin: How to Play" artifact (claude.ai/artifact/HGKofsy96C6SyhkUwF1BgG),
+     restyled onto this page's own tokens instead of its own --surface-sunk/
+     --border/--text/--text-muted/--accent-7 set, so there is one palette on
+     this page, not two. Every board below is drawn at load time by the
+     script near the end of this file, which reimplements the app's own
+     digit/slot/bar math (digits.ts, geometry.ts) — not hand-drawn. */
+  .htp-card{
+    background:var(--surface);
+    border:1px solid var(--rule);
+    border-radius:16px;
+    padding:22px 24px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:18px;
+  }
+  .htp-card h3{
+    margin:0;
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .htp-card h3 .num{
+    font-size:11px;
+    color:var(--mono-accent);
+    border:1px solid var(--mono-accent);
+    border-radius:999px;
+    width:20px;height:20px;
+    display:inline-flex;align-items:center;justify-content:center;
+    flex:none;
+  }
+  .htp-card p{margin:0;font-size:15px;line-height:1.65;color:var(--fg);max-width:68ch}
+  .htp-diagrams{display:flex;gap:20px;flex-wrap:wrap;margin-top:6px;align-items:flex-start;justify-content:center}
+  .htp-diagram{margin:0;display:flex;flex-direction:column;align-items:center;gap:8px;width:180px}
+  .htp-board-card{background:var(--surface-2);border:2px solid var(--rule);border-radius:12px;padding:10px;display:inline-flex}
+  .htp-board-card.small{padding:6px}
+  .htp-tray-slot{background:var(--surface-2);border:1px solid var(--rule);border-radius:10px;padding:6px;display:inline-flex}
+  .htp-diagram figcaption{font-size:12.5px;line-height:1.45;color:var(--muted);text-align:center}
+  .htp-diagram figcaption b{color:var(--fg);font-weight:600}
+  .htp-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:2px;justify-content:center}
+  .htp-legend span{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);font-family:"IBM Plex Mono",ui-monospace,monospace}
+  .htp-swatch{width:12px;height:12px;border-radius:3px;display:inline-block}
+  .htp-mockrow{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:4px;justify-content:center}
+  .htp-icon-btn{position:relative;width:44px;height:44px;border-radius:8px;background:var(--surface-2);border:1px solid var(--rule);display:inline-flex;align-items:center;justify-content:center;color:var(--fg);flex:none}
+  .htp-icon-btn.small{width:36px;height:36px}
+  .htp-icon-btn .htp-badge{position:absolute;top:1px;right:3px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10px;font-weight:700;color:var(--fg)}
+  .htp-icon-btn:disabled{opacity:0.4;cursor:default}
+  .htp-mock-caption{font-size:12.5px;color:var(--muted);line-height:1.5;max-width:34ch}
+  .htp-mini-tab{display:inline-flex;flex-direction:column;align-items:center;gap:4px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10px;color:var(--fg);text-transform:uppercase;letter-spacing:0.05em;padding:6px 10px;border-radius:10px;background:var(--surface-2);border:1px solid var(--rule)}
+  .htp-level-row{display:flex;gap:8px;align-items:center}
+  /* A solved level's square is tinted with its pack's own colour, not a
+     plain theme fill (LevelsScreen.tsx's accentColor/accentTextColor,
+     DIGISPIN-165). Level 2 is in Pack 1 (digit 0, DIGIT_COLORS[0]); white
+     text wins contrast against that red the same way labelColorFor picks
+     it in the app. */
+  .htp-level-square{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:"IBM Plex Mono",ui-monospace,monospace;font-weight:600;font-size:15px;background:#b82c36;color:#ffffff}
+  .htp-level-square-label{font-size:11.5px;color:var(--muted);text-align:center;margin-top:4px}
+  .htp-solutions-mock{background:var(--surface-2);border:1px solid var(--rule);border-radius:14px;padding:14px 16px;width:260px;display:flex;flex-direction:column;gap:10px}
+  .htp-sm-header{display:flex;align-items:center;gap:10px}
+  .htp-sm-title{font-size:13.5px;font-weight:600;color:var(--fg)}
+  .htp-sm-subtitle{font-size:11.5px;color:var(--muted)}
+  .htp-sm-board{align-self:center;background:var(--surface);border:2px solid var(--rule);border-radius:10px;padding:8px}
+  .htp-sm-nav{display:flex;align-items:center;justify-content:center;gap:10px}
+  .htp-sm-nav .htp-chevron{font-size:15px;color:var(--muted);font-weight:700}
+  .htp-sm-nav .htp-dot{width:6px;height:6px;border-radius:3px;background:var(--muted);opacity:0.4}
+  .htp-sm-nav .htp-dot.active{opacity:1}
+  .htp-gesture-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+  .htp-gesture-col{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .htp-gesture-connector{display:flex;flex-direction:column;align-items:center;gap:4px;flex:none}
+  .htp-gesture-connector span{font-size:11.5px;color:var(--muted);white-space:nowrap}
+  .htp-gesture-label{font-size:12px;color:var(--muted);white-space:nowrap}
+
+  nav.site-nav{background:var(--surface);border-bottom:1px solid var(--rule)}
+  .site-nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px;flex-wrap:wrap}
+  .site-nav-brand{display:flex;align-items:center;gap:8px;font-family:"Sora",system-ui,sans-serif;font-weight:700;color:var(--fg);text-decoration:none;font-size:1rem}
+  .site-nav-icon{width:24px;height:24px;flex-shrink:0}
+  .site-nav-links{display:flex;gap:18px;flex-wrap:wrap}
+  .site-nav-links a{color:var(--muted);text-decoration:none;font-size:0.92rem}
+  .site-nav-links a:hover{color:var(--fg)}
+  .site-nav-links a.current{color:var(--accent);font-weight:600}
+  /* A real, working light/dark/system toggle (not just a description of
+     one) — the CSS it drives, via the html[data-theme] attribute, already
+     existed above for the try-it puzzle's theme-aware colours; this just
+     gives a visitor a way to set it directly instead of only inheriting
+     the device's own setting. Fixed so it's reachable at any scroll
+     position, since its effect is page-wide. */
+  .theme-toggle{
+    position:fixed;
+    top:14px;
+    right:14px;
+    z-index:10;
+    display:flex;
+    gap:2px;
+    background:var(--surface);
+    border:1px solid var(--rule);
+    border-radius:999px;
+    padding:3px;
+  }
+  .theme-toggle button{
+    width:32px;height:32px;
+    border:none;
+    border-radius:999px;
+    background:transparent;
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .theme-toggle button.active{
+    background:var(--surface-2);
+    color:var(--fg);
+  }
+</style>
+
+<nav class="site-nav">
+  <div class="wrap site-nav-inner">
+    <a class="site-nav-brand" href="index.html"><svg class="site-nav-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DigiSpin"><polygon points="54.95,38.30 58.55,34.70 58.55,16.70 54.95,13.10 51.35,16.70 51.35,34.70" fill="#b82c36"/><polygon points="60.88,43.44 65.91,42.65 76.49,28.09 75.69,23.06 70.67,23.85 60.09,38.42" fill="#cc8a31"/><polygon points="62.66,51.09 67.19,53.40 84.31,47.84 86.62,43.31 82.09,40.99 64.97,46.56" fill="#e1cb26"/><polygon points="59.60,58.32 61.91,62.86 79.03,68.42 83.56,66.11 81.25,61.57 64.13,56.01" fill="#93b440"/><polygon points="52.87,62.38 52.08,67.40 62.66,81.97 67.68,82.76 68.48,77.73 57.90,63.17" fill="#288c60"/><polygon points="45.05,61.70 41.45,65.30 41.45,83.30 45.05,86.90 48.65,83.30 48.65,65.30" fill="#a0d0ed"/><polygon points="39.12,56.56 34.09,57.35 23.51,71.91 24.31,76.94 29.33,76.15 39.91,61.58" fill="#2c92c8"/><polygon points="37.34,48.91 32.81,46.60 15.69,52.16 13.38,56.69 17.91,59.01 35.03,53.44" fill="#225b99"/><polygon points="40.40,41.68 38.09,37.14 20.97,31.58 16.44,33.89 18.75,38.43 35.87,43.99" fill="#7b277a"/><polygon points="47.13,37.62 47.92,32.60 37.34,18.03 32.32,17.24 31.52,22.27 42.10,36.83" fill="#cc6fa1"/></svg>DigiSpin</a>
+    <div class="site-nav-links">
+      <a href="how-to-play.html" class="current">How to play</a>
+      <a href="features.html">Features</a>
+      <a href="levels.html">Levels</a>
+      <a href="accessibility.html">Accessibility</a>
+    </div>
+  </div>
+</nav>
+
+<section id="how-to-play">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">How to play</span>
+      <h2>The in-app rules page, reused here so the two never drift apart</h2>
+      <p class="lede">Every board below is drawn at load time by a small script that reimplements the app's own digit shapes, rotation, slot math and bar geometry — so a clash, a legal pairing, a dimmed given piece and a full solution all render the same way the real app draws them.</p>
+    </div>
+
+    <section class="htp-card">
+      <h3><span class="num">1</span>The goal, the board and the pieces</h3>
+      <p>Place all ten digit pieces, 0 to 9, on the board so that no two of their bars occupy the same spot. Every piece can be rotated to help it fit.</p>
+      <p>The pieces sit on the lines between the board's cells. Each digit is a shape made of short bars, the same shape as a seven-segment display: 0 is the four edges of one cell, 1 is a straight line with no width, and 2 to 9 each span two cells.</p>
+      <div class="htp-diagrams">
+        <figure class="htp-diagram">
+          <div class="htp-board-card"><div class="svgboard" data-board='{"cols":2,"rows":2,"cell":40,"placements":[{"digit":7,"row":0,"col":0,"rot":270},{"digit":4,"row":0,"col":1,"rot":0},{"digit":1,"row":2,"col":0,"rot":90}]}'></div></div>
+          <figcaption>A 1, a 4 and a 7, already placed — none of their bars share a spot.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="htp-card">
+      <h3><span class="num">2</span>Clashes</h3>
+      <p>A clash is two pieces trying to use the same bar position on the board. DigiSpin won't allow it: the move is refused, the shared bar turns solid red, and a message names the other piece already using it.</p>
+      <div class="htp-diagrams">
+        <figure class="htp-diagram">
+          <div class="htp-board-card"><div class="svgboard" data-board='{"cols":2,"rows":2,"cell":40,"placements":[{"digit":8,"row":0,"col":0,"rot":0},{"digit":4,"row":0,"col":1,"rot":0}]}'></div></div>
+          <figcaption><b>Refused:</b> the 8 and the 4 both want the bar between them — it turns solid red.</figcaption>
+        </figure>
+        <figure class="htp-diagram">
+          <div class="htp-board-card"><div class="svgboard" data-board='{"cols":2,"rows":2,"cell":40,"placements":[{"digit":6,"row":0,"col":0,"rot":0},{"digit":4,"row":0,"col":1,"rot":0}]}'></div></div>
+          <figcaption><b>Allowed:</b> the 6 doesn't light that bar, so the 4 can use it with no clash.</figcaption>
+        </figure>
+      </div>
+      <div class="htp-legend">
+        <span><span class="htp-swatch" style="background:#7b277a"></span>digit 8</span>
+        <span><span class="htp-swatch" style="background:#288c60"></span>digit 4</span>
+        <span><span class="htp-swatch" style="background:#2c92c8"></span>digit 6</span>
+        <span><span class="htp-swatch" style="background:var(--accent)"></span>clash</span>
+      </div>
+      <p style="font-size:13.5px;color:var(--muted)">The app's own first-time tutorial teaches this with a 7 and a 1: an upright 7 and a 1 dropped flat across it share two bars and get refused the same way.</p>
+    </section>
+
+    <section class="htp-card">
+      <h3><span class="num">3</span>Controls</h3>
+      <p>Drag a piece from the tray to place it on the board, or drag a piece already on the board to move it. Tap a piece in the tray to turn it a quarter turn before you place it.</p>
+      <div class="htp-gesture-row">
+        <div class="htp-gesture-col">
+          <div class="htp-tray-slot"><div class="svgboard" data-tray='{"digit":5,"rotation":0,"cell":22,"box":{"width":60,"height":78}}'></div></div>
+          <div class="htp-gesture-label">in the tray</div>
+        </div>
+        <div class="htp-gesture-connector">
+          <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
+            <circle cx="20" cy="20" r="14" fill="none" stroke="var(--muted)" stroke-width="1.2" opacity="0.4" />
+            <circle cx="20" cy="20" r="8.5" fill="none" stroke="var(--muted)" stroke-width="1.2" opacity="0.7" />
+            <circle cx="20" cy="20" r="3.2" fill="var(--fg)" />
+          </svg>
+          <span>① Tap to rotate</span>
+        </div>
+        <div class="htp-gesture-col">
+          <div class="htp-tray-slot"><div class="svgboard" data-tray='{"digit":5,"rotation":90,"cell":22,"box":{"width":60,"height":78}}'></div></div>
+          <div class="htp-gesture-label">still in the tray</div>
+        </div>
+        <div class="htp-gesture-connector">
+          <svg width="46" height="40" viewBox="0 0 46 40" aria-hidden="true">
+            <path d="M5 8 Q 20 30 40 32" fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="4 4" />
+            <circle cx="5" cy="8" r="3" fill="var(--fg)" />
+            <polygon points="40,32 33,29.5 34.5,36" fill="var(--muted)" />
+          </svg>
+          <span>② Drag to the board</span>
+        </div>
+        <div class="htp-gesture-col">
+          <div class="htp-board-card small"><div class="svgboard" data-board='{"cols":2,"rows":2,"cell":32,"placements":[{"digit":6,"row":1,"col":0,"rot":270},{"digit":5,"row":0,"col":0,"rot":90}]}'></div></div>
+          <div class="htp-gesture-label">placed, legally</div>
+        </div>
+      </div>
+      <div class="htp-mockrow">
+        <div class="htp-icon-btn" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M20.49 15a9 9 0 0 1-14.85 3.36L1 14" />
+          </svg>
+        </div>
+        <span class="htp-mock-caption">Restart — sends every piece you've placed back to the tray. Undo and Redo step one move at a time. Given pieces stay where they are.</span>
+      </div>
+    </section>
+
+    <section class="htp-card">
+      <h3><span class="num">4</span>Clues</h3>
+      <p>Some pieces may already be placed and locked for you, giving you a head start — the rest is up to you to work out.</p>
+      <div class="htp-mockrow">
+        <div class="htp-board-card"><div class="svgboard" data-board='{"cols":3,"rows":2,"cell":30,"placements":[{"digit":5,"row":0,"col":0,"rot":0,"locked":true},{"digit":8,"row":0,"col":2,"rot":0}]}'></div></div>
+        <span class="htp-mock-caption">The dimmed 5 is a given — already placed and locked. The full-colour 8 is a piece you placed yourself.</span>
+      </div>
+    </section>
+
+    <section class="htp-card">
+      <h3><span class="num">5</span>Hint</h3>
+      <p>Stuck? Hint places one remaining piece exactly where the solution has it, and locks it there. It costs one of a limited number of hints, shown next to the button.</p>
+      <div class="htp-mockrow">
+        <div class="htp-icon-btn" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3 A6 6 0 0 0 7 12.5 C7 14.5 8.5 15.5 9 17 H15 C15.5 15.5 17 14.5 17 12.5 A6 6 0 0 0 12 3 Z M9.5 21 H14.5" />
+          </svg>
+          <span class="htp-badge">3</span>
+        </div>
+        <span class="htp-mock-caption">The Hint button, with hints left shown as a small number on it.</span>
+      </div>
+    </section>
+
+    <section class="htp-card">
+      <h3><span class="num">6</span>Solutions</h3>
+      <p>Some levels have more than one valid layout — finding a different one than before still counts. To see every solution you've found for a level, go to the Levels screen and hold down on it.</p>
+      <div class="htp-mockrow">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+          <div class="htp-mini-tab">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--fg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 6 H20 M4 12 H20 M4 18 H20" />
+            </svg>
+            Levels
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+          <div class="htp-level-row"><div class="htp-level-square">2</div></div>
+          <div class="htp-level-square-label">played — hold<br />to see solutions</div>
+        </div>
+        <div class="htp-solutions-mock">
+          <div class="htp-sm-header">
+            <div class="htp-icon-btn small" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--fg)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12 H6 M11 7 L6 12 L11 17" />
+              </svg>
+            </div>
+            <div>
+              <div class="htp-sm-title">Level 2 — Solutions</div>
+              <div class="htp-sm-subtitle">1 of 2 found</div>
+            </div>
+          </div>
+          <div class="htp-sm-board"><div class="svgboard" data-board='{"cols":5,"rows":4,"cell":20,"placements":[
+            {"digit":8,"row":0,"col":0,"rot":0},
+            {"digit":4,"row":0,"col":1,"rot":270},
+            {"digit":3,"row":0,"col":3,"rot":0},
+            {"digit":7,"row":0,"col":4,"rot":0},
+            {"digit":9,"row":1,"col":2,"rot":0},
+            {"digit":5,"row":2,"col":0,"rot":90},
+            {"digit":0,"row":2,"col":4,"rot":0},
+            {"digit":6,"row":3,"col":0,"rot":270},
+            {"digit":1,"row":4,"col":2,"rot":90},
+            {"digit":2,"row":3,"col":3,"rot":90}
+          ]}'></div></div>
+          <div class="htp-sm-nav">
+            <span class="htp-chevron">‹</span>
+            <span class="htp-dot active"></span><span class="htp-dot"></span>
+            <span class="htp-chevron">›</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</section>
+
+
+<section id="try-it">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Try it yourself</span>
+      <h2>Finish this layout</h2>
+      <p class="lede">The 8, 9, 1 and 3 are locked in place from the same solved board shown above. Tap a tray piece to pick it up, tap it again to rotate it, then tap a board cell to drop it there — place all six to solve it.</p>
+    </div>
+
+    <div class="tryit-board-wrap">
+      <div class="tryit-board-card"><div id="tryit-board"></div></div>
+    </div>
+    <div class="tryit-tray" id="tryit-tray"></div>
+    <div class="tryit-controls">
+      <button type="button" class="htp-icon-btn" id="tryit-hint" aria-label="Hint">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3 A6 6 0 0 0 7 12.5 C7 14.5 8.5 15.5 9 17 H15 C15.5 15.5 17 14.5 17 12.5 A6 6 0 0 0 12 3 Z M9.5 21 H14.5" />
+        </svg>
+        <span class="htp-badge" id="tryit-hint-count">3</span>
+      </button>
+      <button type="button" class="htp-icon-btn" id="tryit-clear" aria-label="Clear">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M20.49 15a9 9 0 0 1-14.85 3.36L1 14" />
+        </svg>
+      </button>
+      <span class="tryit-status" id="tryit-status">0 of 6 placed</span>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  <div class="wrap">
+    <svg class="footer-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DigiSpin icon"><polygon points="54.95,38.30 58.55,34.70 58.55,16.70 54.95,13.10 51.35,16.70 51.35,34.70" fill="#b82c36"/><polygon points="60.88,43.44 65.91,42.65 76.49,28.09 75.69,23.06 70.67,23.85 60.09,38.42" fill="#cc8a31"/><polygon points="62.66,51.09 67.19,53.40 84.31,47.84 86.62,43.31 82.09,40.99 64.97,46.56" fill="#e1cb26"/><polygon points="59.60,58.32 61.91,62.86 79.03,68.42 83.56,66.11 81.25,61.57 64.13,56.01" fill="#93b440"/><polygon points="52.87,62.38 52.08,67.40 62.66,81.97 67.68,82.76 68.48,77.73 57.90,63.17" fill="#288c60"/><polygon points="45.05,61.70 41.45,65.30 41.45,83.30 45.05,86.90 48.65,83.30 48.65,65.30" fill="#a0d0ed"/><polygon points="39.12,56.56 34.09,57.35 23.51,71.91 24.31,76.94 29.33,76.15 39.91,61.58" fill="#2c92c8"/><polygon points="37.34,48.91 32.81,46.60 15.69,52.16 13.38,56.69 17.91,59.01 35.03,53.44" fill="#225b99"/><polygon points="40.40,41.68 38.09,37.14 20.97,31.58 16.44,33.89 18.75,38.43 35.87,43.99" fill="#7b277a"/><polygon points="47.13,37.62 47.92,32.60 37.34,18.03 32.32,17.24 31.52,22.27 42.10,36.83" fill="#cc6fa1"/></svg>
+    <div class="footer-links">
+      <a class="brand" href="index.html">DigiSpin</a>
+      <a href="accessibility.html">Accessibility</a>
+      <a href="changelog.html">What's new</a>
+      <a href="privacy-policy.html">Privacy policy</a>
+      <a href="support.html">Support</a>
+      <a href="mailto:info@digispin.me">info@digispin.me</a>
+      <a href="https://github.com/joaorodr84">by joaorodr84</a>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+(function () {
+  // Reimplements digits.ts + geometry.ts just enough to draw a board from a
+  // list of placements, for the How to play diagrams above. Kept in lock-step
+  // with those files: same segment table, same rotation transform, same
+  // bar/slot formulas, same "given" colour mix — so every diagram is computed
+  // the same way the app computes it, not hand-approximated.
+  var SEGMENT_EDGES = {
+    a: [[0, 0], [1, 0]], b: [[1, 0], [1, 1]], c: [[1, 1], [1, 2]], d: [[0, 2], [1, 2]],
+    e: [[0, 1], [0, 2]], f: [[0, 0], [0, 1]], g: [[0, 1], [1, 1]]
+  };
+  var LIT_SEGMENTS = {
+    2: ['a', 'b', 'g', 'e', 'd'], 3: ['a', 'b', 'g', 'c', 'd'], 4: ['f', 'g', 'b', 'c'],
+    5: ['a', 'f', 'g', 'c', 'd'], 6: ['a', 'f', 'g', 'e', 'd', 'c'], 7: ['a', 'b', 'c'],
+    8: ['a', 'b', 'c', 'd', 'e', 'f', 'g'], 9: ['a', 'b', 'c', 'd', 'f', 'g']
+  };
+  var ZERO_EDGES = [[[0, 0], [1, 0]], [[1, 0], [1, 1]], [[0, 1], [1, 1]], [[0, 0], [0, 1]]];
+  var ONE_EDGES = [[[0, 0], [0, 1]], [[0, 1], [0, 2]]];
+  var DIGIT_COLORS = { 0: '#b82c36', 1: '#cc8a31', 2: '#e1cb26', 3: '#93b440', 4: '#288c60', 5: '#a0d0ed', 6: '#2c92c8', 7: '#225b99', 8: '#7b277a', 9: '#cc6fa1' };
+  var THICKNESS_SHARE = 0.26;
+  var BODY_INSET_PX = 2.2;
+
+  function shapeOf(digit) {
+    if (digit === 0) return { w: 1, h: 1, edges: ZERO_EDGES };
+    if (digit === 1) return { w: 0, h: 2, edges: ONE_EDGES };
+    return { w: 1, h: 2, edges: LIT_SEGMENTS[digit].map(function (s) { return SEGMENT_EDGES[s]; }) };
+  }
+  function rotatePoint(p, w, h, rot) {
+    var x = p[0], y = p[1];
+    if (rot === 90) return [h - y, x];
+    if (rot === 180) return [w - x, h - y];
+    if (rot === 270) return [y, w - x];
+    return [x, y];
+  }
+  function slotBetween(p, q) {
+    if (p[1] === q[1]) return { o: 'H', line: p[1], index: Math.min(p[0], q[0]) };
+    return { o: 'V', line: p[0], index: Math.min(p[1], q[1]) };
+  }
+  function slotsOf(digit, row, col, rot) {
+    var shape = shapeOf(digit);
+    return shape.edges.map(function (edge) {
+      var rp = rotatePoint(edge[0], shape.w, shape.h, rot);
+      var rq = rotatePoint(edge[1], shape.w, shape.h, rot);
+      return slotBetween([col + rp[0], row + rp[1]], [col + rq[0], row + rq[1]]);
+    });
+  }
+  function slotKey(s) { return s.o + s.line + ':' + s.index; }
+  function barRect(slot, cell) {
+    var t = cell * THICKNESS_SHARE;
+    if (slot.o === 'H') return { left: slot.index * cell, top: slot.line * cell - t / 2, width: cell, height: t };
+    return { left: slot.line * cell - t / 2, top: slot.index * cell, width: t, height: cell };
+  }
+  function shrinkRect(r, s) { return { left: r.left + s, top: r.top + s, width: r.width - 2 * s, height: r.height - 2 * s }; }
+  function barPolygon(r) {
+    var left = r.left, top = r.top, width = r.width, height = r.height, m;
+    if (width >= height) {
+      m = height / 2;
+      return [[left, top + m], [left + m, top], [left + width - m, top], [left + width, top + m], [left + width - m, top + height], [left + m, top + height]];
+    }
+    m = width / 2;
+    return [[left + m, top], [left + width, top + m], [left + width, top + height - m], [left + m, top + height], [left, top + height - m], [left, top + m]];
+  }
+  function pts(poly) { return poly.map(function (p) { return p[0].toFixed(2) + ',' + p[1].toFixed(2); }).join(' '); }
+  function mixToward(hex, target, amount) {
+    var ch = [1, 3, 5].map(function (s) { return parseInt(hex.slice(s, s + 2), 16); });
+    var mixed = ch.map(function (c) { return Math.round(c * (1 - amount) + target * amount); });
+    return '#' + mixed.map(function (c) { return c.toString(16).padStart(2, '0'); }).join('');
+  }
+  function greyedOf(hex) { return mixToward(hex, 128, 0.55); }
+
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  function svgEl(name, attrs) {
+    var e = document.createElementNS(SVGNS, name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  function clashColor() {
+    return getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#b82c36';
+  }
+  function borderColor() {
+    return getComputedStyle(document.documentElement).getPropertyValue('--rule').trim() || '#d6dae2';
+  }
+
+  function renderBoard(container, opts) {
+    var cell = opts.cell, cols = opts.cols, rows = opts.rows, pad = opts.pad || 8;
+    var w = cols * cell + 2 * pad, h = rows * cell + 2 * pad;
+    var svg = svgEl('svg', { viewBox: '0 0 ' + w + ' ' + h, width: w, height: h });
+    var g = svgEl('g', { transform: 'translate(' + pad + ',' + pad + ')' });
+    svg.appendChild(g);
+
+    var grid = svgEl('g', { stroke: borderColor(), 'stroke-width': '1', fill: 'none' });
+    for (var r = 0; r < rows; r++) {
+      for (var c = 0; c < cols; c++) {
+        grid.appendChild(svgEl('rect', { x: c * cell, y: r * cell, width: cell, height: cell }));
+      }
+    }
+    g.appendChild(grid);
+
+    var owner = {};
+    var clashKeys = {};
+    opts.placements.forEach(function (pl) {
+      slotsOf(pl.digit, pl.row, pl.col, pl.rot || 0).forEach(function (s) {
+        var k = slotKey(s);
+        if (owner[k] && owner[k] !== pl) clashKeys[k] = true;
+        owner[k] = pl;
+      });
+    });
+
+    opts.placements.forEach(function (pl) {
+      var digitColor = DIGIT_COLORS[pl.digit];
+      var baseColor = pl.locked ? greyedOf(digitColor) : digitColor;
+      var slots = slotsOf(pl.digit, pl.row, pl.col, pl.rot || 0);
+      slots.forEach(function (s) {
+        var rect = barRect(s, cell);
+        var color = clashKeys[slotKey(s)] ? clashColor() : baseColor;
+        g.appendChild(svgEl('polygon', { points: pts(barPolygon(rect)), fill: color, opacity: '0.22' }));
+        g.appendChild(svgEl('polygon', { points: pts(barPolygon(shrinkRect(rect, BODY_INSET_PX))), fill: color }));
+      });
+    });
+
+    container.appendChild(svg);
+  }
+
+  function renderTrayPiece(container, opts) {
+    var digit = opts.digit, rot = opts.rotation || 0, cell = opts.cell;
+    var box = opts.box || { width: cell * 2.4, height: cell * 2.8 };
+    var slots = slotsOf(digit, 0, 0, rot);
+    var rects = slots.map(function (s) { return barRect(s, cell); });
+    var minX = Math.min.apply(null, rects.map(function (r) { return r.left; }));
+    var maxX = Math.max.apply(null, rects.map(function (r) { return r.left + r.width; }));
+    var minY = Math.min.apply(null, rects.map(function (r) { return r.top; }));
+    var maxY = Math.max.apply(null, rects.map(function (r) { return r.top + r.height; }));
+    var offX = box.width / 2 - (minX + maxX) / 2;
+    var offY = box.height / 2 - (minY + maxY) / 2;
+    var svg = svgEl('svg', { viewBox: '0 0 ' + box.width + ' ' + box.height, width: box.width, height: box.height });
+    var color = DIGIT_COLORS[digit];
+    rects.forEach(function (rect) {
+      var moved = { left: rect.left + offX, top: rect.top + offY, width: rect.width, height: rect.height };
+      svg.appendChild(svgEl('polygon', { points: pts(barPolygon(moved)), fill: color, opacity: '0.22' }));
+      svg.appendChild(svgEl('polygon', { points: pts(barPolygon(shrinkRect(moved, BODY_INSET_PX))), fill: color }));
+    });
+    container.appendChild(svg);
+  }
+
+  document.querySelectorAll('[data-board]').forEach(function (el) {
+    renderBoard(el, JSON.parse(el.getAttribute('data-board')));
+  });
+  document.querySelectorAll('[data-tray]').forEach(function (el) {
+    renderTrayPiece(el, JSON.parse(el.getAttribute('data-tray')));
+  });
+
+  // ---------- "Try it yourself" mini puzzle ----------
+  // The same solved layout shown above (BOX_ART_LAYOUT, boxArtLayout.ts):
+  // 8, 9, 1 and 3 stay locked; the player places 0, 2, 4, 5, 6 and 7. The 1
+  // is locked rather than playable on purpose: it is the one digit whose
+  // footprint has no width or height (digits.ts), and sharing a corner with
+  // the 7 the way it does here is exactly the corner-crossing case
+  // (validate.ts) — a rule canPlace below deliberately does not enforce, a
+  // smaller, scoped recreation for this widget, not the full rules engine.
+  // Locking the 1 sidesteps needing that rule here at all.
+  var TRYIT_BOARD_COLS = 5, TRYIT_BOARD_ROWS = 4;
+  var BOX_ART_LAYOUT = [
+    { digit: 0, row: 2, col: 4, rot: 0 },
+    { digit: 1, row: 4, col: 2, rot: 90 },
+    { digit: 2, row: 3, col: 3, rot: 90 },
+    { digit: 3, row: 0, col: 3, rot: 0 },
+    { digit: 4, row: 0, col: 1, rot: 270 },
+    { digit: 5, row: 2, col: 0, rot: 90 },
+    { digit: 6, row: 3, col: 0, rot: 270 },
+    { digit: 7, row: 0, col: 4, rot: 0 },
+    { digit: 8, row: 0, col: 0, rot: 0 },
+    { digit: 9, row: 1, col: 2, rot: 0 }
+  ];
+  var TRYIT_LOCKED_DIGITS = [8, 9, 1, 3];
+  var TRYIT_MOVABLE_DIGITS = [0, 2, 4, 5, 6, 7];
+  var tryitLocked = BOX_ART_LAYOUT.filter(function (pl) { return TRYIT_LOCKED_DIGITS.indexOf(pl.digit) !== -1; });
+
+  function tryitInBounds(s) {
+    if (s.o === 'H') return s.line >= 0 && s.line <= TRYIT_BOARD_ROWS && s.index >= 0 && s.index <= TRYIT_BOARD_COLS - 1;
+    return s.line >= 0 && s.line <= TRYIT_BOARD_COLS && s.index >= 0 && s.index <= TRYIT_BOARD_ROWS - 1;
+  }
+  function tryitCanPlace(candidate, occupied) {
+    var slots = slotsOf(candidate.digit, candidate.row, candidate.col, candidate.rot);
+    if (!slots.every(tryitInBounds)) return false;
+    var used = {};
+    occupied.forEach(function (pl) {
+      slotsOf(pl.digit, pl.row, pl.col, pl.rot).forEach(function (s) { used[slotKey(s)] = true; });
+    });
+    return slots.every(function (s) { return !used[slotKey(s)]; });
+  }
+
+  var tryitBoardEl = document.getElementById('tryit-board');
+  if (tryitBoardEl) {
+    var tryitTrayEl = document.getElementById('tryit-tray');
+    var tryitHintBtn = document.getElementById('tryit-hint');
+    var tryitHintCountEl = document.getElementById('tryit-hint-count');
+    var tryitClearBtn = document.getElementById('tryit-clear');
+    var tryitStatusEl = document.getElementById('tryit-status');
+
+    var tryitCell = 54, tryitPad = 16;
+    var tryitPlaced = {};
+    var tryitTrayRot = {};
+    var tryitSelected = null;
+    var tryitHints = 3;
+    var tryitSolved = false;
+    var tryitFlash = null;
+    var tryitPreviewGroup = null;
+
+    function tryitOccupied(excludeDigit) {
+      var list = tryitLocked.slice();
+      Object.keys(tryitPlaced).forEach(function (d) {
+        if (Number(d) !== excludeDigit) list.push(tryitPlaced[d]);
+      });
+      return list;
+    }
+
+    function tryitDrawPiece(g, pl, opts) {
+      opts = opts || {};
+      var color = opts.refused ? clashColor() : (pl.locked ? greyedOf(DIGIT_COLORS[pl.digit]) : DIGIT_COLORS[pl.digit]);
+      slotsOf(pl.digit, pl.row, pl.col, pl.rot).forEach(function (s) {
+        var rect = barRect(s, tryitCell);
+        g.appendChild(svgEl('polygon', { points: pts(barPolygon(rect)), fill: color, opacity: '0.22' }));
+        g.appendChild(svgEl('polygon', { points: pts(barPolygon(shrinkRect(rect, BODY_INSET_PX))), fill: color }));
+      });
+    }
+
+    function renderTryitBoard() {
+      tryitBoardEl.innerHTML = '';
+      var w = TRYIT_BOARD_COLS * tryitCell + 2 * tryitPad;
+      var h = TRYIT_BOARD_ROWS * tryitCell + 2 * tryitPad;
+      var svg = svgEl('svg', { viewBox: '0 0 ' + w + ' ' + h, width: w, height: h });
+      var g = svgEl('g', { transform: 'translate(' + tryitPad + ',' + tryitPad + ')' });
+      svg.appendChild(g);
+
+      // Click targets, one per cell, drawn first so a piece's own bars (drawn
+      // later, on top) can still intercept a tap meant for picking it up.
+      for (var r = 0; r < TRYIT_BOARD_ROWS; r++) {
+        for (var c = 0; c < TRYIT_BOARD_COLS; c++) {
+          var cellRect = svgEl('rect', {
+            x: c * tryitCell, y: r * tryitCell, width: tryitCell, height: tryitCell,
+            fill: 'transparent', 'class': 'tryit-cell'
+          });
+          (function (row, col) {
+            cellRect.addEventListener('click', function () { tryitAttemptPlace(row, col); });
+            cellRect.addEventListener('mouseenter', function () { tryitShowPreview(row, col); });
+            cellRect.addEventListener('mouseleave', tryitClearPreview);
+          })(r, c);
+          g.appendChild(cellRect);
+        }
+      }
+
+      var grid = svgEl('g', { stroke: borderColor(), 'stroke-width': '1', fill: 'none', 'pointer-events': 'none' });
+      for (var r2 = 0; r2 < TRYIT_BOARD_ROWS; r2++) {
+        for (var c2 = 0; c2 < TRYIT_BOARD_COLS; c2++) {
+          grid.appendChild(svgEl('rect', { x: c2 * tryitCell, y: r2 * tryitCell, width: tryitCell, height: tryitCell }));
+        }
+      }
+      g.appendChild(grid);
+
+      tryitLocked.forEach(function (pl) {
+        var lockedGroup = svgEl('g', { 'pointer-events': 'none' });
+        tryitDrawPiece(lockedGroup, { digit: pl.digit, row: pl.row, col: pl.col, rot: pl.rot, locked: true });
+        g.appendChild(lockedGroup);
+      });
+
+      Object.keys(tryitPlaced).forEach(function (d) {
+        var pl = tryitPlaced[d];
+        var placedGroup = svgEl('g', { 'class': 'tryit-cell' });
+        tryitDrawPiece(placedGroup, pl);
+        placedGroup.addEventListener('click', function () { tryitPickUp(pl.digit); });
+        g.appendChild(placedGroup);
+      });
+
+      if (tryitFlash) {
+        var flashGroup = svgEl('g', { 'pointer-events': 'none' });
+        tryitDrawPiece(flashGroup, tryitFlash, { refused: true });
+        g.appendChild(flashGroup);
+      }
+
+      // The hover preview (BoardScreen.tsx's PreviewOverlay, while dragging):
+      // an empty group kept on top, filled in and emptied by
+      // tryitShowPreview/tryitClearPreview below without a full re-render,
+      // so hovering across cells stays smooth.
+      tryitPreviewGroup = svgEl('g', { 'pointer-events': 'none' });
+      g.appendChild(tryitPreviewGroup);
+
+      tryitBoardEl.appendChild(svg);
+    }
+
+    // Same legal/clash/opacity rule as PreviewOverlay.tsx: a legal preview is
+    // the piece's own colour at 0.45 opacity; an illegal one turns red, with
+    // the exact slot(s) it clashes on solid (opacity 1) and the rest of the
+    // piece a muted red (0.3) — so the eye lands on the cause, not just "no."
+    function tryitShowPreview(row, col) {
+      if (tryitSelected === null || tryitSolved || !tryitPreviewGroup) return;
+      while (tryitPreviewGroup.firstChild) tryitPreviewGroup.removeChild(tryitPreviewGroup.firstChild);
+      var digit = tryitSelected;
+      var rot = tryitTrayRot[digit] || 0;
+      var slots = slotsOf(digit, row, col, rot);
+      var inBoundsOk = slots.every(tryitInBounds);
+      var used = {};
+      tryitOccupied(digit).forEach(function (pl) {
+        slotsOf(pl.digit, pl.row, pl.col, pl.rot).forEach(function (s) { used[slotKey(s)] = true; });
+      });
+      var legal = inBoundsOk && slots.every(function (s) { return !used[slotKey(s)]; });
+      var color = DIGIT_COLORS[digit];
+      slots.forEach(function (s) {
+        var clashing = inBoundsOk && !!used[slotKey(s)];
+        var fill = legal ? color : clashColor();
+        var opacity = clashing ? 1 : legal ? 0.45 : 0.3;
+        tryitPreviewGroup.appendChild(svgEl('polygon', {
+          points: pts(barPolygon(barRect(s, tryitCell))), fill: fill, opacity: String(opacity)
+        }));
+      });
+    }
+    function tryitClearPreview() {
+      if (!tryitPreviewGroup) return;
+      while (tryitPreviewGroup.firstChild) tryitPreviewGroup.removeChild(tryitPreviewGroup.firstChild);
+    }
+
+    function renderTryitTray() {
+      tryitTrayEl.innerHTML = '';
+      TRYIT_MOVABLE_DIGITS.forEach(function (digit) {
+        if (tryitPlaced[digit]) return;
+        var slot = document.createElement('div');
+        slot.className = 'tryit-tray-slot' + (tryitSelected === digit ? ' selected' : '');
+        slot.addEventListener('click', function () { tryitSelectOrRotate(digit); });
+        renderTrayPiece(slot, { digit: digit, rotation: tryitTrayRot[digit] || 0, cell: 22, box: { width: 56, height: 74 } });
+        tryitTrayEl.appendChild(slot);
+      });
+    }
+
+    function renderTryitStatus() {
+      if (tryitSolved) {
+        tryitStatusEl.textContent = 'Solved!';
+        tryitStatusEl.classList.add('solved');
+      } else {
+        tryitStatusEl.classList.remove('solved');
+        tryitStatusEl.textContent = Object.keys(tryitPlaced).length + ' of ' + TRYIT_MOVABLE_DIGITS.length + ' placed';
+      }
+    }
+
+    function renderTryitAll() {
+      renderTryitBoard();
+      renderTryitTray();
+      renderTryitStatus();
+    }
+
+    function tryitUpdateHintButton() {
+      tryitHintBtn.disabled = tryitSolved || tryitHints <= 0;
+    }
+
+    function tryitCheckWin() {
+      if (Object.keys(tryitPlaced).length === TRYIT_MOVABLE_DIGITS.length) tryitSolved = true;
+      tryitUpdateHintButton();
+    }
+
+    function tryitAttemptPlace(row, col) {
+      if (tryitSolved || tryitSelected === null) return;
+      var digit = tryitSelected;
+      var candidate = { digit: digit, row: row, col: col, rot: tryitTrayRot[digit] || 0 };
+      if (tryitCanPlace(candidate, tryitOccupied(digit))) {
+        tryitPlaced[digit] = candidate;
+        tryitSelected = null;
+        tryitCheckWin();
+        renderTryitAll();
+      } else {
+        tryitFlash = candidate;
+        renderTryitBoard();
+        setTimeout(function () { tryitFlash = null; renderTryitBoard(); }, 350);
+      }
+    }
+
+    function tryitPickUp(digit) {
+      delete tryitPlaced[digit];
+      tryitSolved = false;
+      tryitUpdateHintButton();
+      renderTryitAll();
+    }
+
+    function tryitSelectOrRotate(digit) {
+      if (tryitSolved) return;
+      if (tryitSelected === digit) {
+        tryitTrayRot[digit] = ((tryitTrayRot[digit] || 0) + 90) % 360;
+      } else {
+        tryitSelected = digit;
+      }
+      renderTryitTray();
+    }
+
+    function tryitHint() {
+      if (tryitSolved || tryitHints <= 0) return;
+      var remaining = TRYIT_MOVABLE_DIGITS.filter(function (d) { return !tryitPlaced[d]; });
+      if (!remaining.length) return;
+      var digit = remaining[Math.floor(Math.random() * remaining.length)];
+      var target = BOX_ART_LAYOUT.filter(function (pl) { return pl.digit === digit; })[0];
+      tryitPlaced[digit] = { digit: digit, row: target.row, col: target.col, rot: target.rot };
+      if (tryitSelected === digit) tryitSelected = null;
+      tryitHints -= 1;
+      tryitHintCountEl.textContent = String(tryitHints);
+      tryitCheckWin();
+      renderTryitAll();
+    }
+
+    function tryitClear() {
+      tryitPlaced = {};
+      tryitTrayRot = {};
+      tryitSelected = null;
+      tryitHints = 3;
+      tryitSolved = false;
+      tryitHintCountEl.textContent = '3';
+      tryitUpdateHintButton();
+      renderTryitAll();
+    }
+
+    tryitHintBtn.addEventListener('click', tryitHint);
+    tryitClearBtn.addEventListener('click', tryitClear);
+    renderTryitAll();
+  }
+})();
+</script>
+
+
+<script>
+(function () {
+  var KEY = 'digispin-theme';
+  var buttons = document.querySelectorAll('[data-theme-choice]');
+
+  function currentChoice() {
+    var attr = document.documentElement.getAttribute('data-theme');
+    return attr === 'light' || attr === 'dark' ? attr : 'system';
+  }
+  function reflectActive() {
+    var choice = currentChoice();
+    buttons.forEach(function (btn) {
+      var isActive = btn.getAttribute('data-theme-choice') === choice;
+      btn.classList.toggle('active', isActive);
+    });
+  }
+  function apply(choice) {
+    if (choice === 'light' || choice === 'dark') {
+      document.documentElement.setAttribute('data-theme', choice);
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+    reflectActive();
+    try { localStorage.setItem(KEY, choice); } catch (e) {}
+  }
+
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      apply(btn.getAttribute('data-theme-choice'));
+    });
+  });
+  reflectActive();
+})();
+</script>
+
+
+</body></html>
